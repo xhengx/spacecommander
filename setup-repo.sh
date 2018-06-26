@@ -46,7 +46,11 @@ function ensure_hook_is_installed() {
     echo "#!/usr/bin/env bash" >> $pre_commit_file
     echo "current_repo_path=\$(git rev-parse --show-toplevel)" >> $pre_commit_file
     echo "repo_to_format=\"$repo_path\"" >> $pre_commit_file
-    echo 'if [ "$current_repo_path" == "$repo_to_format" ]'" && [ -e \"$DIR\"/format-objc-hook ]; then \"$DIR\"/format-objc-hook || exit 1; fi" >> $pre_commit_file
+	# 强制每次commit之前执行一次代码格式化
+	echo \"$DIR\"/format-objc-files.sh -s >> $pre_commit_file
+
+# 原有操作是每次提交之前检查并且提醒，然后手动操作
+#    echo 'if [ "$current_repo_path" == "$repo_to_format" ]'" && [ -e \"$DIR\"/format-objc-hook ]; then \"$DIR\"/format-objc-hook || exit 1; fi" >> $pre_commit_file
   fi
 }
 
